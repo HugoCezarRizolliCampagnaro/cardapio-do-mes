@@ -233,7 +233,23 @@ footer p+p{margin-top:8px}
 <meta property="og:title" content="Cardápio do Mês">
 <meta property="og:description" content="Cardápio de 4 semanas com lista de compras pronta e receitas simples.">
 <meta property="og:image" content="https://cardapio-do-mes.vercel.app/img/capa.jpg">
-<!-- PIXEL DA META: cole aqui o código do Pixel (Gerenciador de Eventos > Configurar pixel > Instalar código manualmente) -->
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1632738278530626');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1632738278530626&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -504,6 +520,9 @@ footer p+p{margin-top:8px}
   if (CHECKOUT_URL) {
     document.querySelectorAll(".js-checkout").forEach(a => {
       a.href = CHECKOUT_URL; a.target = "_blank"; a.rel = "noopener";
+      a.addEventListener("click", () => {
+        if (window.fbq) fbq("track", "InitiateCheckout", { value: 19.90, currency: "BRL" });
+      });
     });
   }
 </script>
