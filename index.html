@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cardápio do Mês</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Cardápio de 4 semanas com lista de compras pronta e receitas simples. Organize o mês e coma bem gastando pouco.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: página de vendas em faixas alternadas (creme / verde), uma ideia por faixa, CTA no topo, no meio e na oferta. */
+:root{
+  --green:#1F4A2C; --green-2:#2E6B3F; --leaf:#6AA852; --mint:#E6F0DC;
+  --cream:#FBF7EE; --paper:#FFFDF8; --sand:#F1E8D6; --line:#E4D9C3;
+  --gold:#C9A24A; --gold-ink:#8A6A1F; --tomato:#D9573B; --ink:#23301F; --muted:#5B6756;
+  --on-green:#F4EEDF; --on-green-muted:rgba(244,238,223,.78);
+  --display:'Lora', Georgia, 'Times New Roman', serif;
+  --body:'Figtree', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{background:var(--cream);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);color:var(--green);line-height:1.15;margin:0;text-wrap:balance}
+p{margin:0}
+a{color:inherit}
+img{max-width:100%;height:auto;display:block}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+.band{padding-block:72px}
+.band.alt{background:var(--paper);border-block:1px solid var(--line)}
+.band.dark{background:var(--green);color:var(--on-green)}
+.band.dark h2,.band.dark h3{color:#FFFDF8}
+.kicker{font-size:13px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--gold-ink);margin-bottom:12px}
+.dark .kicker{color:var(--gold)}
+.h2{font-size:clamp(28px,4.2vw,40px);max-width:22ch}
+.lead{font-size:19px;color:var(--muted);max-width:60ch;margin-top:14px}
+.dark .lead{color:var(--on-green-muted)}
+.head{margin-bottom:40px}
+.head.center{text-align:center}
+.head.center .h2,.head.center .lead{margin-inline:auto}
+
+/* botões */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--tomato);color:#fff;text-decoration:none;font-weight:700;font-size:18px;padding:18px 28px;border-radius:999px;box-shadow:0 6px 0 #A63F2A;transition:transform .15s, box-shadow .15s}
+.btn:hover{transform:translateY(2px);box-shadow:0 4px 0 #A63F2A}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn svg{width:20px;height:20px}
+.trust{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--muted);margin-top:16px}
+.trust span{display:inline-flex;align-items:center;gap:6px}
+.trust svg{width:16px;height:16px;color:var(--green-2)}
+.ic{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+/* topo */
+.top{background:var(--green);color:var(--on-green)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:14px}
+.logo{font-family:var(--display);font-weight:700;font-size:20px;color:#FFFDF8;display:flex;align-items:center;gap:8px}
+.logo svg{width:24px;height:24px;color:var(--gold)}
+.top a.mini{font-size:14px;font-weight:700;text-decoration:none;border:1px solid rgba(201,162,74,.6);padding:8px 16px;border-radius:999px;color:var(--on-green)}
+
+/* hero */
+.hero{background:var(--green);color:var(--on-green);padding-block:40px 80px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{color:#FFFDF8;font-size:clamp(36px,5.6vw,58px);letter-spacing:-.01em}
+.hero h1 em{font-style:italic;color:var(--gold);font-weight:500}
+.hero .lead{color:var(--on-green-muted);font-size:20px;margin-top:20px}
+.hero .cta{margin-top:30px}
+.hero .trust{color:var(--on-green-muted)}
+.hero .trust svg{color:var(--gold)}
+.mock{position:relative;aspect-ratio:1/1;max-width:100%;min-width:0}
+.mock img{position:absolute;width:62%;border-radius:6px;box-shadow:0 30px 60px rgba(0,0,0,.35), 0 4px 10px rgba(0,0,0,.2)}
+.mock .back{right:2%;top:8%;transform:rotate(7deg)}
+.mock .front{left:6%;top:2%;transform:rotate(-4deg)}
+.mock .tag{position:absolute;left:0;bottom:6%;background:var(--gold);color:var(--green);font-weight:700;font-size:14px;padding:12px 16px;border-radius:12px;box-shadow:0 10px 24px rgba(0,0,0,.25);transform:rotate(-3deg);line-height:1.3}
+.mock .tag b{display:block;font-family:var(--display);font-size:22px}
+
+/* dor */
+.pain{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.pain li{list-style:none;display:flex;gap:14px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px}
+.pain ul{display:contents}
+.pain svg{flex:none;width:26px;height:26px;color:var(--tomato);margin-top:2px}
+.pain p{font-size:17px}
+.pain-end{margin-top:28px;font-family:var(--display);font-style:italic;font-size:22px;color:var(--green)}
+
+/* como funciona */
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;counter-reset:s;padding:0;margin:0}
+.steps li{list-style:none;counter-increment:s;position:relative;padding-top:58px}
+.steps li::before{content:counter(s);position:absolute;top:0;left:0;width:44px;height:44px;border-radius:50%;background:var(--green);color:#fff;font-family:var(--display);font-weight:700;font-size:20px;display:flex;align-items:center;justify-content:center}
+.steps li:not(:last-child)::after{content:"";position:absolute;top:22px;left:56px;right:-8px;border-top:2px dashed var(--line)}
+.steps h3{font-size:20px;margin-bottom:6px}
+.steps p{color:var(--muted);font-size:16px}
+
+/* reaproveitamento */
+.chain{margin-top:48px;background:var(--sand);border-radius:var(--r);padding:28px;display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center}
+.chain h3{font-size:22px;max-width:14ch}
+.chains{display:grid;gap:12px;min-width:0}
+.chain-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.dish{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 16px;min-width:0}
+.dish small{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold-ink);font-weight:700}
+.dish b{font-family:var(--display);color:var(--green);font-size:18px}
+.arrow{color:var(--green-2);font-size:22px;font-weight:700}
+
+/* o que vem */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:44px}
+.stat{border-top:3px solid var(--gold);padding-top:12px}
+.stat b{display:block;font-family:var(--display);font-size:44px;color:var(--green);line-height:1;font-variant-numeric:tabular-nums}
+.stat span{font-size:15px;color:var(--muted)}
+.gallery{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.gallery figure{margin:0;min-width:0}
+.gallery img{width:100%;border-radius:6px;border:1px solid var(--line);box-shadow:0 14px 30px rgba(31,74,44,.14);transition:transform .25s}
+.gallery figure:hover img{transform:translateY(-6px)}
+.gallery figcaption{margin-top:14px}
+.gallery figcaption b{font-family:var(--display);color:var(--green);font-size:18px;display:block}
+.gallery figcaption span{font-size:15px;color:var(--muted)}
+
+/* amostra */
+.sample{display:grid;grid-template-columns:.9fr 1.1fr;gap:40px;align-items:start}
+.table-wrap{overflow-x:auto;min-width:0;background:var(--paper);border:1px solid var(--line);border-radius:var(--r)}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{background:var(--green);color:#fff;font-family:var(--display);font-weight:600}
+tbody th{font-family:var(--display);color:var(--green);font-weight:600;white-space:nowrap}
+td.j{color:var(--muted)}
+tbody tr:last-child th,tbody tr:last-child td{border-bottom:0}
+.cafe{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px}
+.cafe span{background:var(--mint);color:var(--green);border-radius:999px;padding:6px 14px;font-size:15px;font-weight:500}
+
+/* bônus */
+.bonus{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+.bonus ul{padding:0;margin:24px 0 0;display:grid;gap:12px}
+.bonus li{list-style:none;display:flex;gap:12px;color:var(--on-green)}
+.bonus li svg{flex:none;width:22px;height:22px;color:var(--gold);margin-top:2px}
+.sheet{background:#fff;color:#23301F;border-radius:10px;overflow:hidden;box-shadow:0 30px 60px rgba(0,0,0,.35);font-size:14px;min-width:0}
+.sheet-bar{background:#EDEFEA;display:flex;gap:6px;padding:10px 12px;align-items:center}
+.sheet-bar i{width:10px;height:10px;border-radius:50%;background:#C9CCC4}
+.sheet-bar span{margin-left:8px;font-size:12px;color:#5B6756;font-weight:600}
+.sheet-in{padding:18px}
+.sheet-in h4{margin:0 0 12px;font-family:var(--display);color:var(--green);font-size:18px}
+.sheet table{font-size:13px}
+.sheet th,.sheet td{padding:8px 10px;border-bottom:1px solid #E4D9C3}
+.sheet thead th{background:var(--green);font-family:var(--body);font-weight:700;font-size:12px}
+.sheet .in{background:#FFF4CC}
+.sheet .ok{background:var(--mint)}
+.sheet .sum td{font-weight:700;background:var(--green);color:#fff}
+.tabs{display:flex;gap:4px;flex-wrap:wrap;margin-top:12px}
+.tabs span{font-size:11px;padding:4px 8px;border-radius:4px;background:#EDEFEA;color:#5B6756;font-weight:600}
+.tabs span.on{background:var(--gold);color:var(--green)}
+
+/* para quem */
+.who{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.who div{padding:24px;border-radius:var(--r);background:var(--paper);border:1px solid var(--line)}
+.who svg{width:30px;height:30px;color:var(--green-2);margin-bottom:12px}
+.who h3{font-size:20px;margin-bottom:6px}
+.who p{color:var(--muted);font-size:16px}
+
+/* oferta */
+.offer{max-width:620px;margin:0 auto;background:var(--paper);border:2px solid var(--green);border-radius:20px;overflow:hidden;box-shadow:0 24px 50px rgba(31,74,44,.16)}
+.offer-top{background:var(--green);color:var(--on-green);text-align:center;padding:22px}
+.offer-top h2{color:#FFFDF8;font-size:28px}
+.offer-top p{color:var(--on-green-muted);margin-top:4px}
+.offer-body{padding:30px}
+.offer ul{padding:0;margin:0;display:grid;gap:12px}
+.offer li{list-style:none;display:flex;gap:12px;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:12px}
+.offer li span{display:flex;gap:10px}
+.offer li svg{flex:none;width:22px;height:22px;color:var(--leaf);margin-top:2px}
+.offer li em{font-style:normal;font-size:13px;font-weight:700;color:var(--gold-ink);background:var(--sand);padding:2px 10px;border-radius:999px;align-self:center;white-space:nowrap}
+.price{text-align:center;margin:28px 0 22px}
+.price small{display:block;font-size:15px;color:var(--muted)}
+.price b{font-family:var(--display);font-size:64px;color:var(--green);line-height:1.05;font-variant-numeric:tabular-nums}
+.price b sup{font-size:26px;vertical-align:top;position:relative;top:12px;margin-right:4px}
+.offer .btn{width:100%}
+.offer .trust{justify-content:center}
+.guarantee{max-width:620px;margin:28px auto 0;display:flex;gap:18px;align-items:center;background:var(--mint);border-radius:var(--r);padding:20px 24px}
+.seal{flex:none;width:76px;height:76px;border-radius:50%;background:var(--green);color:#FFFDF8;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--display);line-height:1;border:3px dashed var(--gold);outline:4px solid var(--green)}
+.seal b{font-size:28px}
+.seal span{font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-family:var(--body);font-weight:700}
+.guarantee h3{font-size:19px;margin-bottom:2px}
+.guarantee p{font-size:15px;color:var(--muted)}
+
+/* faq */
+.faq{max-width:760px;margin:0 auto;display:grid;gap:12px}
+.faq details{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:0 22px}
+.faq summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:700;font-size:17px;display:flex;justify-content:space-between;gap:16px;color:var(--green)}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--display);font-size:24px;line-height:1;color:var(--gold-ink);transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq summary:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+.faq details p{padding-bottom:18px;color:var(--muted)}
+
+/* final */
+.final{text-align:center}
+.final .h2{margin-inline:auto}
+.final .lead{margin-inline:auto}
+.final .btn{margin-top:28px}
+.final .trust{justify-content:center;color:var(--on-green-muted)}
+.final .trust svg{color:var(--gold)}
+footer{background:#173A22;color:var(--on-green-muted);font-size:13px;padding-block:28px 96px}
+footer p+p{margin-top:8px}
+
+/* barra fixa no celular */
+.sticky{display:none}
+
+@media (max-width: 880px){
+  .hero .wrap,.sample,.bonus{grid-template-columns:1fr}
+  .mock{max-width:440px;margin:0 auto;width:100%}
+  .steps{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:32px}
+  .steps li::after{display:none}
+  .gallery,.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .who{grid-template-columns:1fr}
+  .chain{grid-template-columns:1fr}
+}
+@media (max-width: 600px){
+  body{font-size:16px}
+  .band{padding-block:56px}
+  .pain{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+  .btn{width:100%;font-size:17px;padding:17px 20px}
+  .top a.mini{display:none}
+  .stat b{font-size:36px}
+  .price b{font-size:54px}
+  .offer-body{padding:22px}
+  .offer li{flex-direction:column;gap:6px}
+  .offer li em{align-self:flex-start;margin-left:32px}
+  .guarantee{flex-direction:column;text-align:center}
+  .sticky{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--paper);border-top:1px solid var(--line);box-shadow:0 -8px 24px rgba(0,0,0,.08);
+    padding:10px max(16px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));align-items:center;gap:12px}
+  .sticky div{font-size:13px;line-height:1.3;color:var(--muted);flex:none}
+  .sticky div b{display:block;font-family:var(--display);font-size:20px;color:var(--green)}
+  .sticky .btn{padding:13px 16px;font-size:16px;box-shadow:0 4px 0 #A63F2A;flex:1}
+}
+</style>
+<meta property="og:title" content="Cardápio do Mês">
+<meta property="og:description" content="Cardápio de 4 semanas com lista de compras pronta e receitas simples.">
+<meta property="og:image" content="img/capa.jpg">
+<!-- PIXEL DA META: cole aqui o código do Pixel (Gerenciador de Eventos > Configurar pixel > Instalar código manualmente) -->
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path class="ic" d="M20 6 9 17l-5-5"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><circle class="ic" cx="12" cy="12" r="9"/><path class="ic" d="m9 9 6 6M15 9l-6 6"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path class="ic" d="M13 2 4 14h7l-1 8 9-12h-7z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect class="ic" x="4" y="11" width="16" height="10" rx="2"/><path class="ic" d="M8 11V7a4 4 0 0 1 8 0v4"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path class="ic" d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path class="ic" d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><path class="ic" d="M3 4h2l2.4 11h11l2-8H6.2"/><circle class="ic" cx="9" cy="19.5" r="1.5"/><circle class="ic" cx="17" cy="19.5" r="1.5"/></symbol>
+  <symbol id="i-leaf" viewBox="0 0 24 24"><path class="ic" d="M5 19C5 10 11 4 20 4c0 9-6 15-15 15z"/><path class="ic" d="M5 19l8-8"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path class="ic" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle class="ic" cx="9" cy="8" r="3.5"/><path class="ic" d="M2.5 20c.5-4 3.5-6 6.5-6s6 2 6.5 6"/><circle class="ic" cx="17" cy="9" r="2.5"/><path class="ic" d="M16 14c3 0 5 2 5.5 5"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path class="ic" d="M3 11 12 4l9 7v9H3z"/><path class="ic" d="M10 20v-5h4v5"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle class="ic" cx="12" cy="8" r="4"/><path class="ic" d="M4 21c1-5 4.5-7 8-7s7 2 8 7"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="wrap">
+    <span class="logo"><svg><use href="#i-leaf"/></svg>Cardápio do Mês</span>
+    <a class="mini js-checkout" href="#oferta">Quero o guia</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="kicker">Guia digital + planilha bônus</p>
+      <h1>Chega de ir ao mercado sem saber <em>o que comprar</em></h1>
+      <p class="lead">Um cardápio de 4 semanas com lista de compras pronta e receitas simples. Você organiza o mês, desperdiça menos e come bem gastando pouco.</p>
+      <div class="cta">
+        <a class="btn js-checkout" href="#oferta"><svg><use href="#i-cart"/></svg>Quero meu cardápio</a>
+        <div class="trust">
+          <span><svg><use href="#i-bolt"/></svg>Acesso na hora</span>
+          <span><svg><use href="#i-lock"/></svg>Pix ou cartão</span>
+          <span><svg><use href="#i-shield"/></svg>Garantia de 7 dias</span>
+        </div>
+      </div>
+    </div>
+    <div class="mock">
+      <img class="back" src="img/semana.jpg" alt="Página do cardápio da Semana 1" width="910" height="1287">
+      <img class="front" src="img/capa.jpg" alt="Capa do guia Cardápio do Mês" width="910" height="1287">
+      <div class="tag">Só<b>R$ 19,90</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Você se reconhece?</p>
+      <h2 class="h2">O problema quase nunca é a comida. É a falta de plano.</h2>
+    </div>
+    <div class="pain">
+      <ul>
+        <li><svg><use href="#i-x"/></svg><p>Vai ao mercado sem lista e volta com o carrinho cheio do que não precisava.</p></li>
+        <li><svg><use href="#i-x"/></svg><p>Todo dia a mesma pergunta: <b>o que vai ter pro almoço?</b></p></li>
+        <li><svg><use href="#i-x"/></svg><p>Legume murchando e comida estragando no fundo da geladeira.</p></li>
+        <li><svg><use href="#i-x"/></svg><p>Acaba pedindo delivery porque não deu tempo de pensar no que cozinhar.</p></li>
+      </ul>
+    </div>
+    <p class="pain-end">Com o cardápio pronto, você só segue o plano.</p>
+  </div>
+</section>
+
+<section class="band alt" id="como">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Como funciona</p>
+      <h2 class="h2">Quatro passos e o mês está organizado</h2>
+    </div>
+    <ol class="steps">
+      <li><h3>Compra a despensa</h3><p>Uma vez no mês, só o que dura: arroz, feijão, farinhas e temperos.</p></li>
+      <li><h3>Leva a lista da semana</h3><p>Toda semana, só o que estraga. Nada de compra por impulso.</p></li>
+      <li><h3>Prepara no domingo</h3><p>Feijão cozido, legumes picados e frango temperado. A semana fica leve.</p></li>
+      <li><h3>Segue o cardápio</h3><p>Café, almoço e janta de cada dia já estão decididos.</p></li>
+    </ol>
+    <div class="chain">
+      <h3>Cozinha uma vez, come duas</h3>
+      <div class="chains">
+        <div class="chain-row">
+          <div class="dish"><small>Segunda</small><b>Frango desfiado</b></div>
+          <span class="arrow" aria-hidden="true">→</span>
+          <div class="dish"><small>Quarta</small><b>Escondidinho de frango</b></div>
+        </div>
+        <div class="chain-row">
+          <div class="dish"><small>Quinta</small><b>Carne moída</b></div>
+          <span class="arrow" aria-hidden="true">→</span>
+          <div class="dish"><small>Sexta</small><b>Bolonhesa</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band" id="conteudo">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">O que vem no guia</p>
+      <h2 class="h2">Tudo pronto pra você só seguir</h2>
+    </div>
+    <div class="stats">
+      <div class="stat"><b>28</b><span>dias de cardápio</span></div>
+      <div class="stat"><b>56</b><span>almoços e jantas</span></div>
+      <div class="stat"><b>16</b><span>receitas passo a passo</span></div>
+      <div class="stat"><b>5</b><span>listas de compras</span></div>
+    </div>
+    <div class="gallery">
+      <figure><img src="img/semana.jpg" alt="Cardápio da Semana 1" width="910" height="1287"><figcaption><b>Cardápio semanal</b><span>Café, almoço e janta de cada dia, com truques de reaproveitamento.</span></figcaption></figure>
+      <figure><img src="img/lista.jpg" alt="Listas de compras das semanas 1 e 2" width="910" height="1287"><figcaption><b>Listas de compras</b><span>Despensa do mês e lista de cada semana, com quadradinho pra marcar.</span></figcaption></figure>
+      <figure><img src="img/receita.jpg" alt="Página de receitas" width="910" height="1287"><figcaption><b>Receitas simples</b><span>Ingredientes do dia a dia, modo de preparo e dica de sobra.</span></figcaption></figure>
+      <figure><img src="img/mes.jpg" alt="Visão geral do mês" width="910" height="1287"><figcaption><b>O mês numa página</b><span>Todos os almoços das 4 semanas pra colar na geladeira.</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="band alt">
+  <div class="wrap sample">
+    <div class="head">
+      <p class="kicker">Amostra grátis</p>
+      <h2 class="h2">Veja a Semana 1 completa</h2>
+      <p class="lead">Comida brasileira de verdade, com ingredientes que você encontra em qualquer mercado. Planejado pra 2 pessoas. Pra família de 4, é só dobrar.</p>
+      <div class="cafe">
+        <span>Pão com ovo</span><span>Cuscuz com ovo</span><span>Banana com aveia</span><span>Tapioca com queijo</span>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Dia</th><th>Almoço</th><th>Janta</th></tr></thead>
+        <tbody>
+          <tr><th>Seg</th><td>Arroz, feijão, frango desfiado e salada de repolho</td><td class="j">Sobra do almoço</td></tr>
+          <tr><th>Ter</th><td>Arroz, feijão e omelete de legumes</td><td class="j">Sopa de legumes com macarrão</td></tr>
+          <tr><th>Qua</th><td>Escondidinho de frango</td><td class="j">Sobra do escondidinho</td></tr>
+          <tr><th>Qui</th><td>Arroz, feijão, carne moída com batata e cenoura</td><td class="j">Sobra do almoço</td></tr>
+          <tr><th>Sex</th><td>Macarrão à bolonhesa</td><td class="j">Pão com ovo e salada</td></tr>
+          <tr><th>Sáb</th><td>Arroz, feijão, salsicha acebolada e farofa</td><td class="j">Cuscuz recheado</td></tr>
+          <tr><th>Dom</th><td>Galinhada</td><td class="j">Sobra da galinhada</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band dark">
+  <div class="wrap bonus">
+    <div>
+      <p class="kicker">Bônus incluso</p>
+      <h2 class="h2">Planilha de planejamento e gastos</h2>
+      <p class="lead">Coloque o preço do seu mercado e veja quanto gastou em cada semana. Funciona no Excel, no Google Planilhas e no celular.</p>
+      <ul>
+        <li><svg><use href="#i-check"/></svg>Todas as listas do guia, prontas pra marcar</li>
+        <li><svg><use href="#i-check"/></svg>Soma sozinha o gasto da semana e do mês</li>
+        <li><svg><use href="#i-check"/></svg>Avisa quando você passa do orçamento</li>
+      </ul>
+    </div>
+    <div class="sheet" aria-label="Exemplo da planilha bônus">
+      <div class="sheet-bar"><i></i><i></i><i></i><span>Planilha-Cardapio-do-Mes.xlsx</span></div>
+      <div class="sheet-in">
+        <h4>Compras da Semana 1</h4>
+        <div class="table-wrap" style="border-radius:6px">
+        <table>
+          <thead><tr><th>Item</th><th>Qtd.</th><th>Preço pago</th><th>Comprado?</th></tr></thead>
+          <tbody>
+            <tr class="ok"><td>Frango</td><td>2,5 kg</td><td class="in">R$ —</td><td class="in">Sim</td></tr>
+            <tr class="ok"><td>Ovos</td><td>30</td><td class="in">R$ —</td><td class="in">Sim</td></tr>
+            <tr><td>Batata</td><td>2 kg</td><td class="in"></td><td class="in"></td></tr>
+            <tr><td>Tomate</td><td>1 kg</td><td class="in"></td><td class="in"></td></tr>
+            <tr class="sum"><td colspan="2">Total gasto</td><td colspan="2">calcula sozinho</td></tr>
+          </tbody>
+        </table>
+        </div>
+        <div class="tabs"><span>Como usar</span><span>Resumo</span><span>Despensa</span><span class="on">Semana 1</span><span>Semana 2</span><span>Semana 3</span><span>Semana 4</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Pra quem é</p>
+      <h2 class="h2">Feito pra rotina de quem cozinha em casa</h2>
+    </div>
+    <div class="who">
+      <div><svg><use href="#i-heart"/></svg><h3>Casais</h3><p>As quantidades já são pensadas pra 2 pessoas, com almoço e janta.</p></div>
+      <div><svg><use href="#i-home"/></svg><h3>Famílias</h3><p>Dobre as quantidades das listas e das receitas e serve 4 pessoas.</p></div>
+      <div><svg><use href="#i-user"/></svg><h3>Quem mora sozinho</h3><p>Siga o mesmo plano e congele metade em porções pra outra semana.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band alt" id="oferta">
+  <div class="wrap">
+    <div class="head center">
+      <p class="kicker">Oferta</p>
+      <h2 class="h2">Leve o mês inteiro organizado</h2>
+    </div>
+    <div class="offer">
+      <div class="offer-top"><h2>Cardápio do Mês</h2><p>Guia digital em PDF + planilha bônus</p></div>
+      <div class="offer-body">
+        <ul>
+          <li><span><svg><use href="#i-check"/></svg>Cardápio de 4 semanas: café, almoço e janta</span></li>
+          <li><span><svg><use href="#i-check"/></svg>Lista da despensa + 4 listas semanais</span></li>
+          <li><span><svg><use href="#i-check"/></svg>16 receitas passo a passo + preparos básicos</span></li>
+          <li><span><svg><use href="#i-check"/></svg>16 dicas pra economizar e aproveitar sobras</span></li>
+          <li><span><svg><use href="#i-check"/></svg>Planilha de planejamento e gastos</span><em>Bônus</em></li>
+        </ul>
+        <div class="price"><small>Pagamento único</small><b><sup>R$</sup>19,90</b><small>no Pix ou no cartão</small></div>
+        <a class="btn js-checkout" href="#oferta"><svg><use href="#i-cart"/></svg>Quero meu cardápio agora</a>
+        <div class="trust">
+          <span><svg><use href="#i-bolt"/></svg>Recebe no e-mail na hora</span>
+          <span><svg><use href="#i-lock"/></svg>Compra segura</span>
+        </div>
+      </div>
+    </div>
+    <div class="guarantee">
+      <div class="seal"><b>7</b><span>dias</span></div>
+      <div><h3>Garantia de 7 dias</h3><p>Se não gostar, peça o reembolso em até 7 dias pela própria plataforma de pagamento. Seu dinheiro volta integralmente.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="head center">
+      <p class="kicker">Dúvidas</p>
+      <h2 class="h2">Perguntas frequentes</h2>
+    </div>
+    <div class="faq">
+      <details><summary>Como eu recebo o guia?</summary><p>Assim que o pagamento é aprovado, você recebe no e-mail o acesso ao PDF e à planilha. No Pix, a aprovação costuma ser na hora.</p></details>
+      <details><summary>Preciso imprimir?</summary><p>Não. Dá pra usar direto no celular. Se preferir, as listas de compras e o mês numa página foram feitos pra imprimir e colar na geladeira.</p></details>
+      <details><summary>Serve pra família com 4 pessoas?</summary><p>Sim. O guia é planejado pra 2 pessoas. Pra 4, é só dobrar as quantidades das listas e das receitas.</p></details>
+      <details><summary>Os ingredientes são caros ou difíceis de achar?</summary><p>Não. É comida brasileira do dia a dia: arroz, feijão, ovo, frango, carne moída e legumes que você encontra em qualquer mercado.</p></details>
+      <details><summary>E se eu não gostar de algum prato?</summary><p>Troque por outro prato da mesma semana. O que importa é manter o plano e aproveitar o que já foi comprado.</p></details>
+      <details><summary>E se o guia não for pra mim?</summary><p>Você tem 7 dias de garantia. Peça o reembolso pela plataforma de pagamento e o valor volta integralmente.</p></details>
+      <details><summary>O guia substitui um nutricionista?</summary><p>Não. É um cardápio de sugestões pro dia a dia. Quem tem restrição alimentar, alergia ou alguma condição de saúde deve adaptar com um profissional.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="band dark final">
+  <div class="wrap">
+    <h2 class="h2">Seu próximo mercado pode ser diferente</h2>
+    <p class="lead">Cardápio pronto, lista na mão e receitas simples. Por R$ 19,90, com garantia de 7 dias.</p>
+    <a class="btn js-checkout" href="#oferta"><svg><use href="#i-cart"/></svg>Quero meu cardápio</a>
+    <div class="trust">
+      <span><svg><use href="#i-bolt"/></svg>Acesso na hora</span>
+      <span><svg><use href="#i-shield"/></svg>Garantia de 7 dias</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Cardápio do Mês. Todos os direitos reservados.</p>
+    <p>Este produto traz sugestões de cardápio pro dia a dia e não substitui a orientação de um nutricionista.</p>
+  </div>
+</footer>
+
+<div class="sticky">
+  <div>Cardápio do Mês<b>R$ 19,90</b></div>
+  <a class="btn js-checkout" href="#oferta">Quero o guia</a>
+</div>
+
+<script>
+  // Cole aqui o link do checkout da Kiwify. Enquanto estiver vazio, os botões levam até a oferta.
+  const CHECKOUT_URL = "";
+  if (CHECKOUT_URL) {
+    document.querySelectorAll(".js-checkout").forEach(a => {
+      a.href = CHECKOUT_URL; a.target = "_blank"; a.rel = "noopener";
+    });
+  }
+</script>
+
+</body>
+</html>
