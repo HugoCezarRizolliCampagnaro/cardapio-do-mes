@@ -232,7 +232,7 @@ footer p+p{margin-top:8px}
 </style>
 <meta property="og:title" content="Cardápio do Mês">
 <meta property="og:description" content="Cardápio de 4 semanas com lista de compras pronta e receitas simples.">
-<meta property="og:image" content="img/capa.jpg">
+<meta property="og:image" content="https://cardapio-do-mes.vercel.app/img/capa.jpg">
 <!-- PIXEL DA META: cole aqui o código do Pixel (Gerenciador de Eventos > Configurar pixel > Instalar código manualmente) -->
 </head>
 <body>
@@ -500,7 +500,7 @@ footer p+p{margin-top:8px}
 
 <script>
   // Cole aqui o link do checkout da Kiwify. Enquanto estiver vazio, os botões levam até a oferta.
-  const CHECKOUT_URL = "";
+  const CHECKOUT_URL = "https://pay.kiwify.com.br/k2cKVQe";
   if (CHECKOUT_URL) {
     document.querySelectorAll(".js-checkout").forEach(a => {
       a.href = CHECKOUT_URL; a.target = "_blank"; a.rel = "noopener";
